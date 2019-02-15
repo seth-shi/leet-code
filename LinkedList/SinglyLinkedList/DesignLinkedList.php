@@ -167,8 +167,8 @@ class MyLinkedList
 }
 
 return [
-    ["MyLinkedList","addAtHead","addAtHead","get","get","addAtHead","addAtIndex","get","addAtIndex","get","addAtHead","addAtIndex"],
-    [[],[5],[6],[2],[2],[7],[1,3],[2],[2,3],[3],[6],[4,2]]
+    ["MyLinkedList","addAtHead","addAtTail","addAtIndex","get","deleteAtIndex","get"],
+    [[],[1],[3],[1, 2],[1],[1],[1]]
 ];
 
 

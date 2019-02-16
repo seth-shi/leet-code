@@ -170,5 +170,3 @@ return [
     ["MyLinkedList","addAtHead","addAtTail","addAtIndex","get","deleteAtIndex","get"],
     [[],[1],[3],[1, 2],[1],[1],[1]]
 ];
-
-

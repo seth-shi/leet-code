@@ -25,9 +25,11 @@ struct ListNode *detectCycle(struct ListNode *head) {
         // 所以我们只需要让其中一个节点从头开始
         // 另一个节点从 x 处走,再次相遇即为链表环点
         //    a
-        // +----+--+
-        //  c   ^  |  b
-        //      +--+  x
+        // +----+----+
+        //      ^    |
+        //    c |    | b
+        //      |    |
+        //      +----+  x
         // 两指针相遇
         if (slow == fast) {
 

@@ -18,19 +18,13 @@ class Application
     {
         $allTestFiles = $this->getAllTestFiles($this->basePath, false);
 
-        foreach ($allTestFiles as $fullPath) {
+        foreach ($allTestFiles as $item) {
 
-            // 1. 先拿到当前测试的代码
-            // 2. 生成一个随机的命名空间
-            // 3. 因为 eval 不解析 <?php, 直接替换成随机命名空间
-            $currTestCode = file_get_contents($fullPath);
-            $namespace = $this->getNamespace();
-            $currTestCode = str_replace('<?php', "namespace {$namespace};", $currTestCode);
+            list($paramNames, $paramValues, $expectOutput) = require $item['file'];
 
-            // 第一个是所有参数, 第二个是测试的数据
-            list($paramNames, $paramValues) = eval($currTestCode);
             // 第一个是类名
-            $object = $this->newClass($namespace, $className = array_shift($paramNames), array_shift($paramValues));
+            array_shift($expectOutput);
+            $object = $this->newClass($item['namespace'], $className = array_shift($paramNames), array_shift($paramValues));
 
             // 绘制输出
             $this->drawTableHeader($className);
@@ -40,7 +34,7 @@ class Application
                 $return = $object->$methodName(...$paramValues[$key]);
 
                 // 绘制表格消息
-                $this->drawTableBody($methodName, $paramValues[$key], $return);
+                $this->drawTableBody($methodName, $paramValues[$key], $expectOutput[$key], $return);
             }
 
             $this->outputTable();
@@ -58,12 +52,6 @@ class Application
         return new $fullClass(...$parameters);
     }
 
-    protected function  getNamespace()
-    {
-        $namespace = 'A';
-
-        return $namespace . $this->offsetIndex ++;
-    }
 
     protected function getAllTestFiles($directory, $isSave = true)
     {
@@ -78,19 +66,25 @@ class Application
                     continue;
                 }
 
-                $fullName = $directory . '/' . $filename;
+                $file = $directory . '/' . $filename;
 
-                if (is_file($fullName)) {
+                if (is_file($file)) {
 
                     if ($isSave && strpos($filename, '.php') !== false) {
 
-                        $files[] = $fullName;
+                        $namespace = str_replace(
+                            [$this->basePath, '/'],
+                            ['', '\\'],
+                            $directory
+                        );
+
+                        $files[] = compact('file', 'namespace');
                     }
 
                     continue;
                 }
 
-                $files = array_merge($files, $this->getAllTestFiles($fullName));
+                $files = array_merge($files, $this->getAllTestFiles($file));
             }
 
             closedir($handle);
@@ -109,14 +103,23 @@ table;
 
     }
 
-    protected function drawTableBody($method, $parameter, $return = null)
+    protected function drawTableBody($method, $parameter, $expectOutput, $return = null)
     {
         $parameter = '(' . implode(', ', $parameter) . ')';
+
+        if (is_null($expectOutput)) {
+            $expectOutput = 'null';
+        }
+
+        if (is_null($return)) {
+            $return = 'null';
+        }
 
         $this->tableText .= <<<table
         
 |    method    {$method}
 |    input     {$parameter}
+|    expect    {$expectOutput}
 |    output    {$return}
 ----------------------------------------
 table;

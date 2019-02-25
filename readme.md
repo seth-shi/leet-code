@@ -16,4 +16,8 @@
         * [相交链表](LinkedList/TwoPointerTechnique/IntersectionLinkedLists.c)
         * [删除链表的倒数第N个节点](LinkedList/TwoPointerTechnique/RemoveNthNodeFromEndOfList.c)
     * 经典问题
-        * [反转链表](LinkedList/ClassicProblems/ReverseLinkedList.c)
+        * [反转链表(迭代)](LinkedList/ClassicProblems/ReverseLinkedList.c)
+        * [反转链表(递归)](LinkedList/ClassicProblems/ReverseLinkedListII.c)
+        * [奇偶链表](LinkedList/ClassicProblems/OddEvenLinkedList.c)
+    * 双链表    
+        * [设计链表](LinkedList/DoublyLinkedList/DesignLinkedList.php)

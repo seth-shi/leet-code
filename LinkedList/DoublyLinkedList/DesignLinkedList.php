@@ -1,6 +1,6 @@
 <?php
 
-namespace LinkedList\DoublyLinkedList;
+namespace LinkedList\DoublyLinkedList\DesignLinkedList;
 
 
 

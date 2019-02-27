@@ -21,3 +21,6 @@
         * [奇偶链表](LinkedList/ClassicProblems/OddEvenLinkedList.c)
     * 双链表    
         * [设计链表](LinkedList/DoublyLinkedList/DesignLinkedList.php)
+    * 小结
+        * [合并两个有序链表](LinkedList/Conclusion/MergeTwoSortedLists.php)
+        * [两数相加](LinkedList/Conclusion/AddTwoNumbers.php)

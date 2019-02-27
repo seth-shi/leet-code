@@ -72,11 +72,15 @@ class Application
 
                     if ($isSave && strpos($filename, '.php') !== false) {
 
+
+                        $class = strstr($filename, '.php', true);
+
                         $namespace = str_replace(
                             [$this->basePath, '/'],
                             ['', '\\'],
                             $directory
                         );
+                        $namespace .= "\\{$class}";
 
                         $files[] = compact('file', 'namespace');
                     }
@@ -105,14 +109,25 @@ table;
 
     protected function drawTableBody($method, $parameter, $expectOutput, $return = null)
     {
+        foreach ($parameter as &$param) {
+
+            if (is_object($param)) {
+                $param = get_class($param);
+            }
+        }
+
         $parameter = '(' . implode(', ', $parameter) . ')';
 
         if (is_null($expectOutput)) {
             $expectOutput = 'null';
+        } else if (is_object($expectOutput) || is_array($expectOutput)) {
+            $expectOutput = json_encode($expectOutput);
         }
 
         if (is_null($return)) {
             $return = 'null';
+        } else if (is_object($return) || is_array($return)) {
+            $return = json_encode($return);
         }
 
         $this->tableText .= <<<table

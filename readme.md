@@ -25,3 +25,4 @@
         * [合并两个有序链表](LinkedList/Conclusion/MergeTwoSortedLists.php)
         * [两数相加](LinkedList/Conclusion/AddTwoNumbers.php)
         * [扁平化多级双向链表](LinkedList/Conclusion/FlattenAMultilevelDoublyLinkedList.php)
+        * [复制带随机指针的链表](LinkedList/Conclusion/CopyListWithRandomPointer.php)

@@ -14,10 +14,9 @@ class ListNode
     public $val;
     public $next;
 
-    public function __construct($val, $next = null)
+    public function __construct($val)
     {
         $this->val = $val;
-        $this->next = $next;
     }
 }
 
@@ -91,15 +90,3 @@ class Solution {
         return $newHead;
     }
 }
-
-
-//[1,2,4]
-//[1,3,4]
-$l1 = new ListNode(1, new ListNode(2, new ListNode(4)));
-$l2 = new ListNode(1, new ListNode(3, new ListNode(4)));
-
-return [
-    ["Solution","mergeTwoLists"],
-    [[], [$l1, $l2]],
-    [null, null]
-];

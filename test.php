@@ -20,7 +20,12 @@ class Application
 
         foreach ($allTestFiles as $item) {
 
-            list($paramNames, $paramValues, $expectOutput) = require $item['file'];
+            $fileReturn = require $item['file'];
+            if (! is_array($fileReturn)) {
+                continue;
+            }
+
+            list($paramNames, $paramValues, $expectOutput) = $fileReturn;
 
             // 第一个是类名
             array_shift($expectOutput);

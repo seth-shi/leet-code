@@ -22,10 +22,9 @@ class ListNode
     public $next = null;
 
 
-    public function __construct($val, $next = null)
+    public function __construct($val)
     {
         $this->val = $val;
-        $this->next = $next;
     }
 
 }
@@ -103,14 +102,3 @@ class Solution {
         return $head;
     }
 }
-//    输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
-//    输出：7 -> 0 -> 8
-//    原因：342 + 465 = 807
-$l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
-$l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
-
-return [
-    ['Solution', 'addTwoNumbers'],
-    [[], [$l1, $l2]],
-    [null, null]
-];

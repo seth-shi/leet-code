@@ -32,6 +32,9 @@ class Solution
     protected $grid;
 
     /**
+     * 如果可以改动原来的地图,直接设置读取过得值为水即可
+     * 就不必使用另一个 map 标记
+     *
      * @param String[][] $grid
      * @return Integer
      */

@@ -125,13 +125,17 @@ table;
 
         if (is_null($expectOutput)) {
             $expectOutput = 'null';
+        } elseif (is_bool($expectOutput)) {
+            $expectOutput = $expectOutput ? 'true' : 'false';
         } else if (is_object($expectOutput) || is_array($expectOutput)) {
             $expectOutput = json_encode($expectOutput);
         }
 
         if (is_null($return)) {
             $return = 'null';
-        } else if (is_object($return) || is_array($return)) {
+        } elseif (is_bool($return)) {
+            $return = $return ? 'true' : 'false';
+        }  else if (is_object($return) || is_array($return)) {
             $return = json_encode($return);
         }
 

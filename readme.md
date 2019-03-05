@@ -27,3 +27,6 @@
         * [扁平化多级双向链表](LinkedList/Conclusion/FlattenAMultilevelDoublyLinkedList.php)
         * [复制带随机指针的链表](LinkedList/Conclusion/CopyListWithRandomPointer.php)
         * [旋转链表](LinkedList/Conclusion/RotateList.php)
+* 队列和栈
+    * 队列:先入先出的数据结构    
+        * [设计循环队列](QueueAndStack/QueueFirstInFirstOutDataStructure/DesignCircularQueue.php)

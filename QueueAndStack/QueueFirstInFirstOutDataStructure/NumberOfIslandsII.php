@@ -1,6 +1,6 @@
 <?php
 
-namespace QueueAndStack\QueueFirstInFirstOutDataStructure\NumberOfIslands;
+namespace QueueAndStack\QueueFirstInFirstOutDataStructure\NumberOfIslandsII;
 
 //    给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。
 //
@@ -28,6 +28,7 @@ class Solution
     protected $xLength;
     protected $yLength;
     protected $visited;
+    protected $index = 0;
 
     /**
      * @param String[][] $grid
@@ -52,7 +53,8 @@ class Solution
                 if ($this->visited[$y][$x] == '1') {
 
                     ++$lands;
-                    $this->DFS($x, $y);
+                    $this->visited[$y][$x] = 0;
+                    $this->BFS($x, $y);
                 }
             }
         }
@@ -61,7 +63,7 @@ class Solution
     }
 
     /**
-     * 使用深度优先算法,直接递归到直到不符合条件
+     * 使用广度优先算法,每次迭代一个层级直到不顾和条件
      * 假设岛屿是这样
      * 1 1 0 0 0
      * 1 1 1 1 0
@@ -85,29 +87,40 @@ class Solution
      * @param $x
      * @param $y
      */
-    protected function DFS($x, $y)
+    protected function BFS($x, $y)
     {
-        // 如果超过了边界,或者当前的值不是岛屿,那么退出
-        if (
-            $x < 0 ||
-            $x == $this->xLength ||
-            $y < 0 ||
-            $y == $this->yLength ||
-            $this->visited[$y][$x] == '0'
-        ) {
-            return;
+        $offset = [0, 1, 0, -1, 0];
+
+        // 待处理队列
+        $q = ["{$y}:{$x}"];
+        while (! empty($q)) {
+
+            $first = array_shift($q);
+            list($y, $x) = array_map('intval', explode(':', $first));
+
+            // 取到上下左右四个
+            for ($i = 0; $i < 4; ++$i) {
+
+                $currX = $x+$offset[$i];
+                $currY = $y+$offset[$i + 1];
+
+                if (
+                    $currX >= 0 &&
+                    $currX < $this->xLength &&
+                    $currY >= 0 &&
+                    $currY < $this->yLength &&
+                    $this->visited[$currY][$currX] == '1'
+                ) {
+
+                    $this->visited[$currY][$currX] = '0';
+                    $q[] = "{$currY}:{$currX}";
+                }
+
+            }
         }
 
-        // 代表已经读取过了
-        $this->visited[$y][$x] = '0';
-        // 上下左右的遍历
-        $this->DFS($x, $y - 1);
-        $this->DFS($x, $y + 1);
-        $this->DFS($x - 1, $y);
-        $this->DFS($x + 1, $y);
     }
 }
-
 
 return [
     ['Solution', 'numIslands'],

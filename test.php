@@ -116,12 +116,17 @@ table;
     {
         foreach ($parameter as &$param) {
 
+            if (is_array($param)) {
+                $param = 'array';
+            }
+
             if (is_object($param)) {
                 $param = get_class($param);
             }
         }
 
         $parameter = '(' . implode(', ', $parameter) . ')';
+
 
         if (is_null($expectOutput)) {
             $expectOutput = 'null';

@@ -30,4 +30,6 @@
 * 队列和栈
     * 队列:先入先出的数据结构    
         * [设计循环队列](QueueAndStack/QueueFirstInFirstOutDataStructure/DesignCircularQueue.php)
-        * [岛屿的个数](QueueAndStack/QueueFirstInFirstOutDataStructure/NumberOfIslands.php)
+        * [岛屿的个数(DFS)](QueueAndStack/QueueFirstInFirstOutDataStructure/NumberOfIslands.php)
+        * [岛屿的个数(BFS)](QueueAndStack/QueueFirstInFirstOutDataStructure/NumberOfIslandsII.php)
+        * [打开转盘锁](QueueAndStack/QueueFirstInFirstOutDataStructure/OpenTheLock.php)

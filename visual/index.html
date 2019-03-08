@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>可视化算法</title>
     <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/toastr.min.css">
     <style>
         #container {
             width: 100%;
@@ -140,17 +141,46 @@
 </div>
 
 <script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/toastr.min.js"></script>
 <script src="layui/layui.all.js"></script>
 <script>
+
 
     // 初始化一个矩阵,并设置好开始和结束点
     let matrix = new Matrix(50, 40);
     matrix.initMap().setStart(new Point(5, 5)).setEnd(new Point(20, 5));
 
     $(function () {
+
+        let notices = [
+            '绿色是起点,红色是终点',
+            '点击空白区域可拖动生成围墙,拖动起点/终点可设置位置',
+            '点击蓝色三角形之后,可选择搜索算法',
+            '一切就绪之后,点击搜索即可开始!!!'
+        ];
+
+        eachToaStr(notices);
+
         $('#container').html(matrix.render());
     });
 
+    let toaTimer = null;
+    function eachToaStr(notices)
+    {
+        let msg = notices.shift();
+
+        if (! msg) {
+            clearTimeout(toaTimer);
+            return;
+        }
+
+        toastr.info(msg, '', {timeOut: 5000});
+
+        toaTimer = setTimeout(function () {
+
+            eachToaStr(notices);
+        }, 2000);
+    }
 
     /**
      * 矩阵存储数据

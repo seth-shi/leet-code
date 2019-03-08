@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__.'/Operations/Basics/Point.php';
+require __DIR__.'/Operations/Basics/Node.php';
 require __DIR__.'/Operations/Basics/Search.php';
 
 $parameters = json_decode(file_get_contents('php://input'), true);
@@ -27,8 +28,8 @@ if (! class_exists($type)) {
  */
 $class = new $type(
     $parameters['map'],
-    new Point($parameters['start_point']),
-    new Point($parameters['end_point'])
+    Point::mapNewInstance($parameters['start_point']),
+    Point::mapNewInstance($parameters['end_point'])
 );
 
 $startTime = microtime(true);
@@ -43,7 +44,15 @@ if ($find) {
     $find = '搜索失败';
 }
 
-responseJson($class->history, "{$find}, 本次搜索用时 {$usedTime}");
+
+$data = [
+    'history' => $class->history,
+    'short_path' => $class->shortestPath,
+    'find' => $find,
+    'used_time' => $usedTime
+];
+
+responseJson($data, "{$find}, 本次搜索用时 {$usedTime}");
 
 
 

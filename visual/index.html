@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>可视化算法</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <style>
+        #container {
+            width: 100%;
+            overflow-y: scroll;
+            white-space: nowrap;
+        }
+
+        .grid-line {
+            margin: 0;
+            padding: 0;
+            font-size: 0;
+        }
+
+        .common-grid {
+            box-sizing: border-box;
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            border-top: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            cursor: move;
+        }
+
+        /*左边框*/
+        .common-grid:first-child {
+            border-left: 1px solid #ddd;
+        }
+
+        .visited-grid {
+            background-color: #ddd;
+        }
+        /*下边框*/
+        .grid-line:last-child .common-grid {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #start-grid {
+            width: 100%;
+            height: 100%;
+            background-color: #5FB878;
+            cursor: pointer;
+        }
+
+        #end-grid {
+            width: 100%;
+            height: 100%;
+            background-color: #FF5722;
+            cursor: pointer;
+        }
+
+        #operation-container {
+            width: 400px;
+            height: 500px;
+            background-color: rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50px;
+            right: -380px;
+        }
+        #operation-container #spread{
+            width:0;
+            height:0;
+            border-width: 30px 30px 30px 0;
+            border-style:solid;
+            border-color:transparent #1E9FFF transparent transparent;/*透明 灰 透明 透明 */
+            position: absolute;
+            left: -130px;
+            top: 50%;
+            margin-top: -30px;
+            cursor: pointer;
+        }
+        #operation-container .button-group {
+            width: 100px;
+            height: 200px;
+            padding: 10px 0;
+            background-color: rgba(0, 0, 0, 0.1);
+            position: absolute;;
+            left: -100px;
+            top: 50%;
+            margin-top: -100px;
+            text-align: center;
+        }
+
+        .not-allow {
+            pointer-events:none
+        }
+        .history-grid {
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+
+</div>
+
+<div id="operation-container">
+    <!-- 向左的三角形 -->
+    <div id="spread" class="shrink">
+    </div>
+    <div class="button-group">
+        <button class="layui-btn" id="start-search">开始搜索</button>
+        <hr>
+        <button class="layui-btn" id="clear-wall">清除路墙</button>
+        <hr>
+        <button class="layui-btn" id="clear-search">清除搜索</button>
+    </div>
+
+    <div class="layui-collapse" lay-accordion lay-filter="panels">
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title not-allow" data-type="BFS">BFS(广度搜索算法)</h2>
+            <div class="layui-colla-content layui-show">内容区域</div>
+        </div>
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title" data-type="DFS">DFS(深度搜索算法)</h2>
+            <div class="layui-colla-content">内容区域</div>
+        </div>
+    </div>
+</div>
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="layui/layui.all.js"></script>
+<script>
+
+    // 初始化一个矩阵,并设置好开始和结束点
+    let matrix = new Matrix(40, 20);
+    matrix.initMap().setStart(new Point(5, 5)).setEnd(new Point(20, 5));
+
+    $(function () {
+        $('#container').html(matrix.render());
+    });
+
+
+
+    /**
+     * 矩阵存储数据
+     * @constructor
+     */
+    function Matrix(w, h) {
+
+        this.constant = {
+            BLACK_VALUE: 0,
+            START_VALUE: 9,
+            END_VALUE: -9
+        };
+
+        // 渲染的宽高度
+        this.w = w;
+        this.h = h;
+
+        // 开始结束坐标
+        this.startPoint = null;
+        this.endPoint = null;
+
+        // 绘制对象
+        this.builder = new Builder();
+
+        // 初始数据
+        this.map = [];
+
+        // 初始化矩阵
+        this.initMap = function () {
+
+            for (let y = 0; y < this.h; ++y) {
+
+                for (let x = 0; x < this.w; ++x) {
+
+                    if (!this.map[y]) {
+                        this.map[y] = [];
+                    }
+
+                    this.map[y][x] = 0;
+                }
+            }
+
+            return this;
+        };
+        /**
+         * 设置开始的点
+         */
+        this.setStart = function (newPoint) {
+
+            // 先移除原来的值
+            let oldPoint = this.startPoint;
+            if (oldPoint) {
+                this.map[oldPoint.y][oldPoint.x] = this.constant.BLACK_VALUE;
+            }
+
+            this.map[newPoint.y][newPoint.x] = this.constant.START_VALUE;
+            this.startPoint = newPoint;
+
+            return this;
+        };
+
+        /**
+         * 设置结束的点
+         */
+        this.setEnd = function (newPoint) {
+
+            // 先移除原来的值
+            let oldPoint = this.endPoint;
+            if (oldPoint) {
+                this.map[oldPoint.y][oldPoint.x] = this.constant.BLACK_VALUE;
+            }
+
+            this.map[newPoint.y][newPoint.x] = this.constant.END_VALUE;
+            this.endPoint = newPoint;
+
+            return this;
+        };
+
+        this.isStart = function (x, y) {
+
+            return this.startPoint.x === x && this.startPoint.y === y;
+        };
+
+        this.isEnd = function (x, y) {
+            return this.endPoint.x === x && this.endPoint.y === y;
+        };
+
+        this.render = function () {
+
+            let contents = '';
+
+            for (let y in this.map) {
+
+                let line = this.map[y];
+                contents += this.builder.getLine();
+
+                for (let x in line) {
+
+                    switch (line[x]) {
+
+                        case this.constant.START_VALUE:
+                            contents += this.builder.getStartGrid(x, y);
+                            break;
+                        case this.constant.END_VALUE:
+                            contents += this.builder.getEndGrid(x, y);
+                            break;
+                        case this.constant.BLACK_VALUE:
+                        default:
+                            contents += this.builder.getCommonGrid(x, y);
+
+                    }
+
+                }
+
+                contents += this.builder.getLine(true);
+            }
+
+            return contents;
+        };
+
+        // 设置墙壁的样式
+        this.toggleVisitedClass = function (dom) {
+
+            // 设置值为
+            let className = 'visited-grid';
+
+            // 如果当前节点不在开始或者结束
+            let y = dom.data('y');
+            let x = dom.data('x');
+            let isSOrE = this.isStart(x, y) || this.isEnd(x, y);
+
+            if (! isSOrE) {
+
+                // 如果已经是墙壁了,那么就删除掉墙壁
+                if (dom.hasClass(className)) {
+
+                    this.map[y][x] = 0;
+                    dom.removeClass(className);
+                } else {
+
+                    this.map[y][x] = 1;
+                    dom.addClass(className);
+                }
+
+            }
+        };
+    }
+
+    /**
+     * 坐标对象
+     * @constructor
+     */
+    function Point(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * 画表格数据
+     * @constructor
+     */
+    function Builder() {
+
+        this.getLine = function (isEnd) {
+
+            isEnd = isEnd || false;
+
+            if (isEnd) {
+                return "</div>";
+            }
+
+            return "<div class='grid-line'>";
+        };
+
+
+        this.getCommonGrid = function (x, y) {
+
+            return "<div class='common-grid' id='xy-"+ x +"-"+ y+"'" +
+                "data-x='" + x + "' data-y='" + y + "'></div>";
+        };
+
+        this.getStartGrid = function (x, y) {
+            return "<div class='common-grid' id='xy-"+ x +"-"+ y+"'" +
+                "data-x='" + x + "' data-y='" + y + "'>" +
+                "<div id='start-grid' draggable='true' title='x:"+x+" y:"+y+"'></div></div>";
+        };
+
+        this.getEndGrid = function (x, y) {
+            return "<div class='common-grid' id='xy-"+ x +"-"+ y+"'" +
+                "data-x='" + x + "' data-y='" + y + "'>" +
+                "<div id='end-grid' draggable='true' title='x:"+x+" y:"+y+"'></div></div>";
+        };
+    }
+
+
+    // 拖动变色
+    // 鼠标松开,那么就是结束 mouseup
+    let isDown = false;
+    $('#container').on('mousedown', '.common-grid', function () {
+
+        event.preventDefault();
+        // 查看当前节点是否是开始节点和结束节点
+        let x = $(this).data('x');
+        let y = $(this).data('y');
+
+
+        if (matrix.isStart(x, y) || matrix.isEnd(x, y)) {
+            return;
+        }
+
+        isDown = true;
+        matrix.toggleVisitedClass($(this));
+    });
+    $('#container').on('mouseover', '.common-grid', function () {
+
+        event.preventDefault();
+
+        if (! isDown) {
+            return;
+        }
+        matrix.toggleVisitedClass($(this));
+    });
+    $('#container').on('mouseup', '.common-grid', function () {
+        event.preventDefault();
+        isDown = false;
+    });
+
+
+    // 拖动终点和起点
+    $('#container').on('dragstart', '#start-grid', function () {
+
+        event.preventDefault();
+        event.dataTransfer.setData('dom-id', $(this).attr('id'));
+
+    });
+    $('#container').on('dragstart', '#end-grid', function () {
+
+        event.preventDefault();
+        event.dataTransfer.setData('dom-id', $(this).attr('id'));
+    });
+    // 可以放置的对象
+    $('#container').on('dragenter', '.common-grid', function () {
+
+        event.preventDefault();
+    });
+    // 拖动经过的时候
+    $('#container').on('dragover', '.common-grid', function () {
+
+        event.preventDefault();
+    });
+    // 拖动结束放置的事件
+    $('#container').on('drop', '.common-grid', function () {
+
+        event.preventDefault();
+
+        let that = $(this);
+        let x = that.data('x');
+        let y = that.data('y');
+
+        // 如果放在开始或者结束直接不执行
+        if (matrix.isStart(x, y) || matrix.isEnd(x, y)) {
+            return;
+        }
+
+        // 当前拖动的元素是开始还是结束
+        let id = event.dataTransfer.getData("dom-id");
+        let isStart = id === 'start-grid';
+
+
+        // 然后修改数据
+        if (isStart) {
+            matrix.setStart(new Point(x, y));
+        } else {
+            matrix.setEnd(new Point(x, y));
+        }
+
+        // 把拖动的元素放到这里
+        console.log(matrix.startPoint, matrix.endPoint);
+        let dom = document.getElementById(id);
+        dom.title = "x:"+x+" y:"+y+"";
+        that.html(dom);
+    });
+
+</script>
+<script>
+
+    // 搜索算法初始化
+    let type = 'BFS';
+
+    $('#spread').click(function () {
+
+        let that = $(this);
+        let className = 'shrink';
+
+        let parent = that.parent('#operation-container');
+        let moveWidth = -1 * parent.width();
+
+        if (that.hasClass(className)) {
+
+            parent.animate({right: '-=' + moveWidth+ 'px'}, 1000);
+            that.removeClass(className);
+        } else {
+
+            parent.animate({right: '+=' + moveWidth+ 'px'}, 1000);
+            that.addClass(className);
+        }
+
+    });
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //一些事件监听
+        element.on('collapse(panels)', function(data){
+
+            // 先把其他所有的移除掉禁止点击 class
+            $('.layui-colla-title').removeClass('not-allow');
+            data.title.addClass('not-allow');
+
+            type = data.title.data('type');
+        });
+    });
+
+
+
+    // 开始搜索
+    let visitedTimer = null;
+    $('#start-search').click(function () {
+
+        layer.load(1, {shade: [0.1, '#fff']});
+
+        let parameters = {
+            type: type,
+            map: matrix.map,
+            start_point: matrix.startPoint,
+            end_point: matrix.endPoint
+        };
+
+        $.ajax({
+            type: 'post',
+            url: 'index.php',
+            data: JSON.stringify(parameters),
+            contentType: "application/json",
+            complete: function (result) {
+
+                let res = result.responseJSON;
+
+                layer.closeAll();
+
+                if (res.code != 200) {
+                    layer.msg(res.msg, {icon: 2});
+                    return;
+                }
+
+                layer.msg(res.msg);
+                // 刷新表格数据
+                let history = res.data;
+                eachRenderVisited(history);
+            }
+        });
+    });
+
+    function eachRenderVisited(queueHistory)
+    {
+        let first = queueHistory.shift();
+        let id = "#xy-" + first.x + "-" + first.y;
+        $(id).addClass('history-grid');
+
+        visitedTimer = setTimeout(function () {
+            eachRenderVisited(queueHistory);
+        }, 100)
+    }
+
+    // 清除路墙壁
+    $('#clear-wall').click(function () {
+
+        let start = matrix.startPoint;
+        let end = matrix.endPoint;
+
+        let contents = matrix.initMap().setStart(start).setEnd(end).render();
+        $('#container').html(contents);
+    });
+
+    // 清除搜索记录
+    $('#clear-search').click(function () {
+
+        clearTimeout(visitedTimer);
+        $('.common-grid').removeClass('history-grid');
+    });
+</script>
+</body>
+</html>

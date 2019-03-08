@@ -24,9 +24,25 @@ class Search
         $this->end= $end;
     }
 
-    public function search()
+    public function search($allowAngle)
     {
         return true;
+    }
+
+    /**
+     * @param bool $allowAngle
+     * @return Point[]
+     */
+    protected function getOffsets($allowAngle = false)
+    {
+        // 上下左右的四个偏移量 上下左右
+        $offset = [new Point(0, -1), new Point(0, 1), new Point(-1, 0), new Point(1, 0)];
+
+        if ($allowAngle) {
+            $offset = array_merge($offset, [new Point(1, 1), new Point(-1, -1), new Point(-1, 1), new Point(1, -1)]);
+        }
+
+        return $offset;
     }
 
     protected function getShortestPath(Node $end)

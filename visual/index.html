@@ -10,7 +10,6 @@
     <style>
         #container {
             width: 100%;
-            overflow-y: scroll;
             white-space: nowrap;
         }
 
@@ -84,7 +83,7 @@
 
         #operation-container .button-group {
             width: 100px;
-            height: 160px;
+            height: 220px;
             padding: 10px 0;
             background-color: rgba(0, 0, 0, 0.1);
             position: absolute;;
@@ -108,7 +107,7 @@
     </style>
 </head>
 <body>
-<div id="container" style="background-color: ">
+<div id="container">
 
 </div>
 
@@ -116,12 +115,16 @@
     <!-- 向左的三角形 -->
     <div id="spread" class="shrink">
     </div>
-    <div class="button-group">
-        <button class="layui-btn" id="start-search">开始搜索</button>
+
+    <div class="button-group layui-form">
+        <input type="checkbox"  lay-filter="angle_box" lay-skin="switch" lay-text="斜角|斜角" />
+
         <hr>
-        <button class="layui-btn" id="clear-wall">清除路墙</button>
+        <button type="button" class="layui-btn" id="start-search">开始搜索</button>
         <hr>
-        <button class="layui-btn" id="clear-search">清除搜索</button>
+        <button type="button" class="layui-btn" id="clear-wall">清除路墙</button>
+        <hr>
+        <button type="button" class="layui-btn" id="clear-search">清除搜索</button>
     </div>
 
     <div class="layui-collapse" lay-accordion lay-filter="panels">
@@ -174,6 +177,8 @@
 
         // 初始数据
         this.map = [];
+        this.type = 'BFS';
+        this.allow_angle = false;
 
         // 初始化矩阵
         this.initMap = function () {
@@ -438,10 +443,6 @@
 
 </script>
 <script>
-
-    // 搜索算法初始化
-    let type = 'BFS';
-
     $('#spread').click(function () {
 
         let that = $(this);
@@ -461,8 +462,15 @@
         }
 
     });
-    layui.use('element', function () {
-        var element = layui.element;
+    layui.use(['element', 'form'], function () {
+        var element = layui.element, form = layui.form;
+
+
+        form.on('switch(angle_box)', function(data){
+
+            matrix.allow_angle = data.elem.checked;
+        });
+
 
         //一些事件监听
         element.on('collapse(panels)', function (data) {
@@ -471,8 +479,13 @@
             $('.layui-colla-title').removeClass('not-allow');
             data.title.addClass('not-allow');
 
-            type = data.title.data('type');
+            matrix.type = data.title.data('type');
         });
+    });
+
+    $('#angle_box').change(function () {
+
+       console.log($(this));
     });
 
 
@@ -483,7 +496,8 @@
         layer.load(1, {shade: [0.1, '#fff']});
 
         let parameters = {
-            type: type,
+            allow_angle: matrix.allow_angle,
+            type: matrix.type,
             map: matrix.map,
             start_point: matrix.startPoint,
             end_point: matrix.endPoint

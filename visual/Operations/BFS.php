@@ -7,16 +7,16 @@ class BFS extends Search
 
     /**
      * 广度优先搜索
+     *
+     * @param $allowAngle
+     * @return bool
      */
-    public function search()
+    public function search($allowAngle)
     {
         $yLength = count($this->map);
         $xLength = count($this->map[0]);
 
-        // 上下左右的四个偏移量
-        $offset = [0, 1, 0, -1, 0];
-        // 是否开启对角线
-        // $offset = [1, 1, -1, -1, 1];
+        $offsets = $this->getOffsets($allowAngle);
 
         // 初始化搜索队列
         $queue = [$this->start->toString()];
@@ -51,9 +51,9 @@ class BFS extends Search
             }
 
             // 这条数据去其他方向寻找
-            for ($i = 0; $i < 4; ++$i) {
+            foreach ($offsets as $p) {
 
-                $offsetPoint = new Point($firstPoint->x + $offset[$i], $firstPoint->y + $offset[$i+1]);
+                $offsetPoint = new Point($firstPoint->x + $p->x, $firstPoint->y + $p->y);
 
                 if (
                     $offsetPoint->x >= 0 &&

@@ -34,7 +34,7 @@ $class = new $type(
 
 $startTime = microtime(true);
 
-$find = $class->search();
+$find = $class->search($parameters['allow_angle'] ?? true);
 
 $usedTime = microtime(true) - $startTime;
 

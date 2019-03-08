@@ -34,11 +34,11 @@ $class = new $type(
 
 $startTime = microtime(true);
 
-$find = $class->search($parameters['allow_angle'] ?? true);
+$class->search($parameters['allow_angle'] ?? true);
 
 $usedTime = microtime(true) - $startTime;
 
-if ($find) {
+if ($class->find) {
     $find = '搜索成功';
 } else {
     $find = '搜索失败';

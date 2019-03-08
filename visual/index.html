@@ -535,11 +535,7 @@
      * @param queueShortestPath
      */
     function eachRenderSearchResult(queueHistory, queueShortestPath) {
-        // 如果结束数组也渲染完毕,那么停止
-        if (queueShortestPath.length === 0) {
-            clearTimeout(resultTimer);
-            return;
-        }
+
 
         // 如果搜索记录渲染完毕,那么开始渲染最短路径
         let first = null;
@@ -550,6 +546,12 @@
         } else {
             first = queueShortestPath.shift();
             className = 'shortest-path-grid';
+        }
+
+        // 如果结束数组也渲染完毕,那么停止
+        if (first === null) {
+            clearTimeout(resultTimer);
+            return;
         }
 
         let id = "#xy-" + first.x + "-" + first.y;

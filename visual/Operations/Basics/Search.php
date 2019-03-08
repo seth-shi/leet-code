@@ -2,10 +2,14 @@
 
 class Search
 {
+    // 前端参数地图 map
     protected $map;
+    // 开始结束节点
     protected $start;
     protected $end;
+    // 访问过的节点
     protected $visited = [];
+
     const WALL = '1';
     const BLACK = '0';
 
@@ -14,8 +18,12 @@ class Search
      * @var Node[]
      */
     public $mapNode = [];
+    // 历史路径,用于前端绘制
     public $history = [];
+    // 最短路径
     public $shortestPath = [];
+    // 是否找到终点
+    public $find = false;
 
     public function __construct(array $map, Point $start, Point $end)
     {

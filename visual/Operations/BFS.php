@@ -47,6 +47,8 @@ class BFS extends Search
 
                 $this->shortestPath = $this->getShortestPath($mapNode);
 
+                $this->find = true;
+
                 return true;
             }
 

@@ -11,28 +11,31 @@ class Point
         $this->y = $y;
     }
 
-    public static function mapNewInstance(array $attributes)
-    {
-        $instance = new self();
 
-        foreach ($attributes as $key => $val) {
-
-            if (property_exists($instance, $key)) {
-
-                $instance->$key = $val;
-            }
-        }
-
-        return $instance;
-    }
-
-    public static function stringNewInstance($xy)
+    /**
+     * 把坐标点换成对象
+     * @param $xy
+     * @return Point
+     */
+    public static function newInstanceByString($xy)
     {
         list($x, $y) = array_map('intval', explode(':', $xy));
 
         return new self($x, $y);
     }
 
+    public function eq(Point $point)
+    {
+        return $this->x == $point->x && $this->y == $point->y;
+    }
+
+    public function offset($x, $y)
+    {
+        $this->x += $x;
+        $this->y += $y;
+
+        return $this;
+    }
 
     public function toString()
     {

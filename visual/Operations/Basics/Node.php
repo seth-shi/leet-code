@@ -11,4 +11,20 @@ class Node
         $this->point = $point;
         $this->parent = $parent;
     }
+
+
+    public function getShortestPath()
+    {
+        $path = new Collection();
+        $end = $this;
+
+        while (! is_null($end)) {
+
+            $path->push($end->point);
+
+            $end = $end->parent;
+        }
+
+        return $path;
+    }
 }

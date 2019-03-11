@@ -2,68 +2,64 @@
 
 class Search
 {
-    // 前端参数地图 map
-    protected $map;
+    /**
+     * @var Matrix
+     */
+    protected $matrix;
     // 开始结束节点
     protected $start;
     protected $end;
-    // 访问过的节点
-    protected $visited = [];
 
-    const WALL = '1';
-    const BLACK = '0';
 
     /**
-     * 映射节点,用于协助寻找最短路径
-     * @var Node[]
+     * 正常情况下关闭列表是一个空数组,每次访问过加入
+     * 但这样子效率太低,每次都要遍历数组是否出现这个元素
+     * 现在直接初始化为矩阵参数,直接通过 key 访问
+     * @var array
      */
-    public $mapNode = [];
+    protected $closeList;
+    // 开启关闭列表
+    protected $openList;
+
+    // 可以寻找的方向, 上下左右 + 四个斜方向 ?
+    protected $moveDirections;
+
+    // 映射节点,用于协助寻找最短路径
+    protected $pathNodes;
+
+    // 最短路径,用于前端绘制
+    public $shortestPath;
     // 历史路径,用于前端绘制
-    public $history = [];
-    // 最短路径
-    public $shortestPath = [];
+    public $history;
+
     // 是否找到终点
     public $find = false;
 
-    public function __construct(array $map, Point $start, Point $end)
+    public function __construct(array $matrix, Point $startPoint, Point $endPoint, $allowAngle)
     {
-        $this->visited = $this->map = $map;
-        $this->start = $start;
-        $this->end= $end;
-    }
+        $this->matrix = new Matrix($matrix);
+        $this->start = $startPoint;
+        $this->end= $endPoint;
 
-    public function search($allowAngle)
-    {
-        return true;
-    }
-
-    /**
-     * @param bool $allowAngle
-     * @return Point[]
-     */
-    protected function getOffsets($allowAngle = false)
-    {
         // 上下左右的四个偏移量 上下左右
-        $offset = [new Point(0, -1), new Point(0, 1), new Point(-1, 0), new Point(1, 0)];
+        $this->moveDirections = new Collection([new Point(0, -1), new Point(0, 1), new Point(-1, 0), new Point(1, 0)]);
 
         if ($allowAngle) {
-            $offset = array_merge($offset, [new Point(1, 1), new Point(-1, -1), new Point(-1, 1), new Point(1, -1)]);
+
+            // 四个斜顶方向
+            $this->moveDirections->merge([new Point(1, 1), new Point(-1, -1), new Point(-1, 1), new Point(1, -1)]);
         }
 
-        return $offset;
+
+        $this->closeList = new Collection();
+        $this->openList = new Collection();
+        $this->pathNodes = new Collection();
+        $this->history = new Collection();
+        $this->shortestPath = new Collection();
     }
 
-    protected function getShortestPath(Node $end)
+    public function search()
     {
-        $path = [];
-
-        while (! is_null($end)) {
-
-            $path[] = $end->point;
-
-            $end = $end->parent;
-        }
-
-        return $path;
+        return true;
     }
 }

@@ -1,7 +1,9 @@
 <?php
 
+require __DIR__.'/Operations/Basics/Collection.php';
 require __DIR__.'/Operations/Basics/Point.php';
 require __DIR__.'/Operations/Basics/Node.php';
+require __DIR__.'/Operations/Basics/Matrix.php';
 require __DIR__.'/Operations/Basics/Search.php';
 
 $parameters = json_decode(file_get_contents('php://input'), true);
@@ -28,13 +30,14 @@ if (! class_exists($type)) {
  */
 $class = new $type(
     $parameters['map'],
-    Point::mapNewInstance($parameters['start_point']),
-    Point::mapNewInstance($parameters['end_point'])
+    new Point($parameters['start_point']['x'], $parameters['start_point']['y']),
+    new Point($parameters['end_point']['x'], $parameters['end_point']['y']),
+    $parameters['allow_angle'] ?? true
 );
 
 $startTime = microtime(true);
 
-$class->search($parameters['allow_angle'] ?? true);
+$class->search();
 
 $usedTime = microtime(true) - $startTime;
 

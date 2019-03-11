@@ -10,72 +10,62 @@ class DFS extends Search
     /**
      * 广度优先搜索
      *
-     * @param $allowAngle
      * @return bool
      */
-    public function search($allowAngle)
+    public function search()
     {
-        $this->yLength = count($this->map);
-        $this->xLength = count($this->map[0]);
-
-        $offsets = $this->getOffsets($allowAngle);
-
-        // 初始化最短路径节点
-        $parentNode = null;
-
         try {
 
-            $this->DFSSearch($this->start, $offsets);
+            $this->DFSSearch($this->start);
 
         } catch (Exception $e) {
-            return true;
+
         }
-
-
 
         return true;
     }
 
 
-    public function DFSSearch(Point $point, $offsets, $parentNode = null)
+    public function DFSSearch(Point $point, $parentNode = null)
     {
         // 如果超过了边界,或者当前的值不是岛屿,那么退出
         if (
             $point->x < 0 ||
-            $point->x == $this->xLength ||
+            $point->x == $this->matrixWidth ||
             $point->y < 0 ||
-            $point->y == $this->yLength ||
-            $this->visited[$point->y][$point->x] == Search::WALL
+            $point->y == $this->matrixHeight ||
+            $this->closeList[$point->y][$point->x] == Search::WALL
         ) {
             return;
         }
 
         // 存储找过的节点
         $this->history[] = $point;
-        // 是否已经有这个节点
-        if (! array_key_exists($point->toString(), $this->mapNode)) {
 
-            $this->mapNode[$point->toString()] = new Node($point, $parentNode);
+        // 是否已经有这个节点
+        if (! array_key_exists($point->toString(), $this->pathNodes)) {
+
+            $this->pathNodes[$point->toString()] = new Node($point, $parentNode);
         }
-        $mapNode = $this->mapNode[$point->toString()];
+        $pathNodes = $this->pathNodes[$point->toString()];
 
         // 如果找到了终点
-        if ($point->x == $this->end->x && $point->y == $this->end->y) {
+        if ($point->eq($this->end)) {
 
-            $this->shortestPath = $this->getShortestPath($mapNode);
+            $this->shortestPath = $this->getShortestPath($pathNodes);
             $this->find = true;
 
             throw new Exception('找到解答');
         }
 
         // 代表已经读取过了
-        $this->visited[$point->y][$point->x] = Search::WALL;
+        $this->closeList[$point->y][$point->x] = Search::WALL;
 
         // 上下左右的遍历
-        foreach ($offsets as $p) {
+        foreach ($this->moveDirections as $moveNode) {
 
-            $offsetPoint = new Point($point->x + $p->x, $point->y + $p->y);
-            $this->DFSSearch($offsetPoint, $offsets, $mapNode);
+            $newNode = $point->offset($moveNode->x, $moveNode->y);
+            $this->DFSSearch($newNode, $pathNodes);
         }
     }
 

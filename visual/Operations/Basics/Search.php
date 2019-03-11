@@ -24,8 +24,6 @@ class Search
     // 可以寻找的方向, 上下左右 + 四个斜方向 ?
     protected $moveDirections;
 
-    // 映射节点,用于协助寻找最短路径
-    protected $pathNodes;
 
     // 最短路径,用于前端绘制
     public $shortestPath;

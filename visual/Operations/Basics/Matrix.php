@@ -40,8 +40,8 @@ class Matrix
     }
 
 
-    public function get($x, $y)
+    public function get(Point $p)
     {
-        return $this->data[$y][$x] ?? null;
+        return $this->data[$p->y][$p->x] ?? null;
     }
 }

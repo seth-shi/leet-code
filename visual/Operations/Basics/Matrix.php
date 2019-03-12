@@ -2,9 +2,8 @@
 
 class Matrix
 {
-    // 方块
-    const WALL = '1';
-    const BLACK = '0';
+    // 墙壁
+    const WALL = 0;
 
     protected $data;
     protected $width;
@@ -16,6 +15,20 @@ class Matrix
 
         $this->height = count($data);
         $this->width = count($data[0] ?? []);
+    }
+
+    /**
+     * 判断这个坐标点是否包含在矩阵里面
+     * @param Point $p
+     * @return bool
+     */
+    public function contains(Point $p)
+    {
+        return
+            $p->x >= $this->leftMargin() &&
+            $p->x <= $this->rightMargin() &&
+            $p->y >= $this->topMargin() &&
+            $p->y <= $this->bottomMargin();
     }
 
 

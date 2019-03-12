@@ -33,12 +33,9 @@ class DFS extends Search
      */
     public function DFSSearch(Point $point, $parentNode = null)
     {
-        // 如果超过了边界,或者当前的值不是岛屿,那么退出
         if (
-            $point->x < $this->matrix->leftMargin() ||
-            $point->x > $this->matrix->rightMargin() ||
-            $point->y < $this->matrix->topMargin() ||
-            $point->y > $this->matrix->bottomMargin() ||
+            // 如果矩阵里面不包含这个点
+            ! $this->matrix->contains($point) ||
             // 或者当前坐标点是墙壁
             $this->matrix->get($point) == Matrix::WALL ||
             // 或者当前坐标点已经访问过(加入了关闭列表)
@@ -71,11 +68,12 @@ class DFS extends Search
         $this->closeList->put($point->toString(), Matrix::WALL);
 
         // 上下左右的遍历
-        $this->moveDirections->each(function (Point $movePoint) use ($point, $endNode) {
+        $this->moveDirections->each(function (Point $offset) use ($point, $endNode) {
 
-            $newNode = (clone $point)->offset($movePoint->x, $movePoint->y);
+            // 偏移数组位置
+            $directionPoint = (clone $point)->offset($offset);
 
-            $this->DFSSearch($newNode, $endNode);
+            $this->DFSSearch($directionPoint, $endNode);
         });
     }
 

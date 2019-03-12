@@ -7,7 +7,7 @@ class Collection implements JsonSerializable
     public function __construct($items = [])
     {
         if (! is_array($items)) {
-            $items = func_get_args();
+            $items = [$items];
         }
 
         $this->items = $items;
@@ -17,6 +17,11 @@ class Collection implements JsonSerializable
     public function isNotEmpty()
     {
         return ! empty($this->items);
+    }
+
+    public function count()
+    {
+        return count($this->items);
     }
 
     public function pop()
@@ -38,16 +43,6 @@ class Collection implements JsonSerializable
         }
 
         return $this;
-    }
-
-    public function remember($key, $value)
-    {
-        if (! $this->has($key)) {
-
-            $this->items[$key] = $value;
-        }
-
-        return $this->items[$key];
     }
 
     public function put($key, $value)

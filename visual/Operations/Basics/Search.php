@@ -51,7 +51,6 @@ class Search
 
         $this->closeList = new Collection();
         $this->openList = new Collection();
-        $this->pathNodes = new Collection();
         $this->history = new Collection();
         $this->shortestPath = new Collection();
     }

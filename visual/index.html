@@ -199,7 +199,9 @@
     function Matrix(w, h) {
 
         this.constant = {
-            BLACK_VALUE: 0,
+            // 空格的值不是固定的
+            WALL_VALUE: 0,
+            BLACK_VALUE: 1,
             START_VALUE: 9,
             END_VALUE: -9
         };
@@ -231,7 +233,7 @@
                         this.map[y] = [];
                     }
 
-                    this.map[y][x] = 0;
+                    this.map[y][x] = this.constant.BLACK_VALUE;
                 }
             }
 
@@ -329,11 +331,11 @@
                 // 如果已经是墙壁了,那么就删除掉墙壁
                 if (dom.hasClass(className)) {
 
-                    this.map[y][x] = 0;
+                    this.map[y][x] = matrix.constant.BLACK_VALUE;
                     dom.removeClass(className);
                 } else {
 
-                    this.map[y][x] = 1;
+                    this.map[y][x] = matrix.constant.WALL_VALUE;
                     dom.addClass(className);
                 }
 

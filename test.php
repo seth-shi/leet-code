@@ -8,6 +8,7 @@ class Application
     protected $basePath;
     protected $offsetIndex = 0;
     protected $tableText;
+    protected $exceptDirectories = ['/visual'];
 
     public function __construct($basePath = null)
     {
@@ -32,7 +33,7 @@ class Application
             $object = $this->newClass($item['namespace'], $className = array_shift($paramNames), array_shift($paramValues));
 
             // 绘制输出
-            $this->drawTableHeader($className);
+            $this->drawTableHeader($item['namespace']);
 
             foreach ($paramNames as $key => $methodName) {
 
@@ -93,7 +94,11 @@ class Application
                     continue;
                 }
 
-                $files = array_merge($files, $this->getAllTestFiles($file));
+                $relativePath = str_replace($this->basePath, '', $file);
+                if (! in_array($relativePath, $this->exceptDirectories)) {
+                    $files = array_merge($files, $this->getAllTestFiles($file));
+                }
+
             }
 
             closedir($handle);

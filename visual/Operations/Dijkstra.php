@@ -1,70 +1,93 @@
 <?php
 
-
-class Dijkstra extends Search
+class Dijkstra
 {
-    protected $distance = 10;
+    protected $matrix;
 
-    /**
-     * 迪杰斯特拉算法
-     *
-     * @return bool
-     */
-    public function search()
+    public function __construct()
     {
-        // 辅助找到最路径
-        $mapPathNodes = new Collection();
-        // 初始化搜索队列
-        $this->openList->push($this->start->toString());
+        //                         3
+        //                 e+-----------------+
+        //                 ^                  |
+        //                2|                  |
+        //                 |                  |
+        //           1     +  1        3      |
+        //      a +------> b +---> d +---+    |
+        //      +                  +     |    |
+        //      |                  |     v    |
+        //    2 |                  |4    g <--+
+        //      |                  |     ^
+        //      v                  v   1 |
+        //      c                  f +---+
+        //      +                  ^
+        //      |                  |
+        //      |         2        |
+        //      +------------------+
 
-        // 如果开放列表里数据不为空
-        while ($this->openList->isNotEmpty()) {
-
-            // 出队开放列表的元素,并转化成为坐标对象
-            $headPoint = Point::newInstanceByString($this->openList->shift());
-
-            // 记录历史记录,方便前端渲染
-            $this->history->push($headPoint);
-
-            /**
-             * @var $endNode Node
-             * 如果已经存在了这个节点,那么直接获取这个节点即可
-             * 防止重复设置父节点
-             */
-            $endNode = $mapPathNodes->remember($headPoint->toString(), new Node($headPoint, null));
-
-            // !!! 如果当前节点等于结束节点,那么代表已经找到了终点
-            if ($headPoint->eq($this->end)) {
-
-                // 规划处最短路径, 并设置找到了终点
-                $this->shortestPath = $endNode->getShortestPath();
-                $this->find = true;
-
-                return true;
-            }
-
-            // BFS 在这里是有多少个方向,就去往这些方向寻找
-            // Dijkstra 选择暂时最短最优的路线,动态规划
-            $this->moveDirections->each(function (Point $offset) use ($headPoint) {
-
-                $newPoint = $headPoint->offset($offset);
-
-                if (
-                    $this->matrix->contains($newPoint) &&
-                    ! $this->closeList->has($newPoint->toString()) &&
-                    // 而且这个距离更短
-                    false
-                ) {
-
-                }
-
-            });
-
-        }
-
-
-        return false;
+        //有向图存储
+        $this->matrix = array(
+            'a' => array('a' => INF, 'b' => 1,   'c' => 2,   'd' => INF, 'e' => INF, 'f' => INF, 'g' => INF),
+            'b' => array('a' => INF, 'b' => INF, 'c' => INF, 'd' => 1,   'e' => 2,   'f' => INF, 'g' => INF),
+            'c' => array('a' => INF, 'b' => INF, 'c' => INF, 'd' => INF, 'e' => INF, 'f' => 2, 'g' => INF),
+            'd' => array('a' => INF, 'b' => INF, 'c' => INF, 'd' => INF, 'e' => INF, 'f' => 4, 'g' => 3),
+            'e' => array('a' => INF, 'b' => INF, 'c' => INF, 'd' => INF, 'e' => INF, 'f' => INF, 'g' => 3),
+            'f' => array('a' => INF, 'b' => INF, 'c' => INF, 'd' => INF, 'e' => INF, 'f' => INF, 'g' => 1),
+            'g' => array('a' => INF, 'b' => INF, 'c' => INF, 'd' => INF, 'e' => INF, 'f' => INF, 'g' => INF),
+        );
     }
 
+    public function search()
+    {
+        $start = 'a';
+        $end = 'g';
 
+        // 存储路径上节点距离源点的最小距离
+        $closeList = [$start => true];
+        $openList = array();
+
+        // 初始化图中节点与源点的最小距离
+        foreach ($this->matrix[$start] as $key => $value) {
+
+            // 得到各个点到源点的距离
+            $openList[$key] = $value;
+        }
+
+        foreach ($this->matrix as $y => $item) {
+
+            // 设置为初始索引,即使找不到最小值,也不会影响
+            $minIndex = $start;
+            $minVal = INF;
+
+
+            // 找到当前行中最小的值,并选取作为优选
+            foreach ($item as $x => $val) {
+
+                // 如果此节点已经寻找过(防止回溯)
+                // 如果没有找到最短路径, 并且最短距离数据的当前值更小
+                // 每一次都从源点距离数据数组中取最小的出来,并且必须是还未访问过的
+                if (! array_key_exists($x, $closeList) && $openList[$x] < $minVal) {
+
+                    $minVal = $openList[$x];
+                    $minIndex = $x;
+                }
+            }
+
+            // 标记这个节点已经找过, 不能再倒回去找
+            $closeList[$minIndex] = true;
+
+
+            // 当找到最小轴之后,再去循环最小轴的那一行数据,
+            // 从那一行中拿出每一个数据加上最小值和节点距离源点数组作比较
+            foreach ($this->matrix[$minIndex] as $k => $v) {
+
+                // 如果当前的这个点值加上当前轴往外扩展的距离如果更小
+                if (! array_key_exists($k, $closeList) && ($minVal+$v < $openList[$k])) {
+
+                    $openList[$k] = $minVal+$v;
+                }
+            }
+        }
+
+        var_dump($openList[$end]);
+    }
 }

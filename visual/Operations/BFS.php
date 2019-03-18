@@ -71,7 +71,7 @@ class BFS extends Search
                         // 入队,作为下一次的迭代对象
                         $this->openList->push($directionPoint);
 
-                        // 计算最短路径
+                        // 规划最短路径
                         $pathNodes->put(
                             $directionPoint->toString(),
                             new Node($directionPoint, $pathNodes->get($currPoint->toString()))

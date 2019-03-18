@@ -37,8 +37,15 @@
             border-left: 1px solid #ddd;
         }
 
-        .visited-grid {
+        /* 墙壁,雨林,沼泽 */
+        .wall-grid {
             background-color: #2F4056;
+        }
+        .rainforest-grid {
+            background-color: #376956;
+        }
+        .moor-grid {
+            background-color: #1F6FB5;
         }
 
         /*下边框*/
@@ -66,7 +73,7 @@
             background-color: rgba(0, 0, 0, 0.1);
             position: absolute;
             top: 50px;
-            right: -380px;
+            right: -420px;
         }
 
         #operation-container #spread {
@@ -76,7 +83,7 @@
             border-style: solid;
             border-color: transparent #1E9FFF transparent transparent; /*透明 灰 透明 透明 */
             position: absolute;
-            left: -130px;
+            left: -150px;
             top: 50%;
             margin-top: -30px;
             cursor: pointer;
@@ -84,13 +91,13 @@
 
         #operation-container .button-group {
             width: 100px;
-            height: 250px;
+            height: 290px;
             padding: 10px 0;
             background-color: rgba(0, 0, 0, 0.1);
             position: absolute;;
-            left: -100px;
+            left: -120px;
             top: 50%;
-            margin-top: -100px;
+            margin-top: -120px;
             text-align: center;
         }
 
@@ -117,9 +124,15 @@
     <div id="spread" class="shrink">
     </div>
 
-    <div class="button-group layui-form">
-        <input type="checkbox"  lay-filter="angle_box" lay-skin="switch" lay-text="斜角|斜角" />
+    <div class="button-group layui-form" style="padding: 10px;">
 
+        <select lay-filter="move-type" lay-verify="required">
+            <option value="0" title="围墙不可通过">墙壁</option>
+            <option value="2">雨林</option>
+            <option value="3">沼泽</option>
+        </select>
+
+        <input type="checkbox"  lay-filter="angle_box" lay-skin="switch" lay-text="斜角|斜角" />
         <hr>
         <button type="button" class="layui-btn" id="start-search">开始搜索</button>
         <hr>
@@ -127,24 +140,30 @@
         <hr>
         <button type="button" class="layui-btn" id="clear-search">清除搜索</button>
         <hr>
-        <a target="_blank" href="https://github.com/DavidNineRoc/leet-code" class="layui-badge layui-bg-orange"><span class="layui-badge-dot"></span> Github地址</a>
+        <a target="_blank" href="https://github.com/DavidNineRoc/leet-code" class="layui-badge layui-bg-orange">
+            <span class="layui-badge-dot"></span> Github地址
+        </a>
     </div>
 
     <div class="layui-collapse" lay-accordion lay-filter="panels">
         <div class="layui-colla-item">
-            <h2 class="layui-colla-title not-allow" data-type="BFS">BFS(广度搜索算法)</h2>
+            <h2 class="layui-colla-title not-allow" data-type="BFS">BFS(Breadth First Search)</h2>
             <div class="layui-colla-content layui-show">广度搜索算法</div>
         </div>
         <div class="layui-colla-item">
-            <h2 class="layui-colla-title" data-type="DFS">DFS(深度搜索算法)</h2>
+            <h2 class="layui-colla-title" data-type="BestFS">BFS(Best First Search)</h2>
+            <div class="layui-colla-content">最佳优先搜索</div>
+        </div>
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title" data-type="DFS">DFS(Depth First Search)</h2>
             <div class="layui-colla-content">深度搜索算法</div>
         </div>
         <div class="layui-colla-item">
-            <h2 class="layui-colla-title" data-type="Dijkstra">Dijkstra(迪杰斯特拉算法)</h2>
+            <h2 class="layui-colla-title" data-type="Dijkstra">Dijkstra(暂无)</h2>
             <div class="layui-colla-content">迪杰斯特拉算法</div>
         </div>
         <div class="layui-colla-item">
-            <h2 class="layui-colla-title" data-type="AStar">A*(A-Star算法)</h2>
+            <h2 class="layui-colla-title" data-type="AStar">A*(A-Star)</h2>
             <div class="layui-colla-content">A*寻路算法</div>
         </div>
     </div>
@@ -154,7 +173,6 @@
 <script src="js/toastr.min.js"></script>
 <script src="layui/layui.all.js"></script>
 <script>
-
 
     // 初始化一个矩阵,并设置好开始和结束点
     let matrix = new Matrix(50, 40);
@@ -166,7 +184,9 @@
             '绿色是起点,红色是终点',
             '点击空白区域可拖动生成围墙,拖动起点/终点可设置位置',
             '点击蓝色三角形之后,可选择搜索算法',
-            '一切就绪之后,点击搜索即可开始!!!'
+            '选择墙壁,雨林等绘制之后,再用相同的绘制可变为平地',
+            '一切就绪之后,点击搜索即可开始!!!',
+            '潜心学习算法,待成之日再回来玩弄'
         ];
 
         eachToaStr(notices);
@@ -201,10 +221,15 @@
         this.constant = {
             // 空格的值不是固定的
             WALL_VALUE: 0,
+            // 平地,默认,消耗 1
             BLACK_VALUE: 1,
-            START_VALUE: 9,
-            END_VALUE: -9
+            // 雨林
+            RAIN_FOREST: 2,
+            // 沼泽,每走一步消耗 3
+            MOOR: 3
         };
+        // 当前默认选择的是墙壁
+        this.moveType = this.constant.WALL_VALUE;
 
         // 渲染的宽高度
         this.w = w;
@@ -250,7 +275,7 @@
                 this.map[oldPoint.y][oldPoint.x] = this.constant.BLACK_VALUE;
             }
 
-            this.map[newPoint.y][newPoint.x] = this.constant.START_VALUE;
+            this.map[newPoint.y][newPoint.x] = this.constant.BLACK_VALUE;
             this.startPoint = newPoint;
 
             return this;
@@ -267,7 +292,7 @@
                 this.map[oldPoint.y][oldPoint.x] = this.constant.BLACK_VALUE;
             }
 
-            this.map[newPoint.y][newPoint.x] = this.constant.END_VALUE;
+            this.map[newPoint.y][newPoint.x] = this.constant.BLACK_VALUE;
             this.endPoint = newPoint;
 
             return this;
@@ -275,11 +300,12 @@
 
         this.isStart = function (x, y) {
 
-            return this.startPoint.x === x && this.startPoint.y === y;
+            return this.startPoint.x === parseInt(x) && this.startPoint.y === parseInt(y);
         };
 
         this.isEnd = function (x, y) {
-            return this.endPoint.x === x && this.endPoint.y === y;
+
+            return this.endPoint.x === parseInt(x) && this.endPoint.y === parseInt(y);
         };
 
         this.render = function () {
@@ -293,14 +319,17 @@
 
                 for (let x in line) {
 
-                    switch (line[x]) {
+                    // 如果是开始区域
+                    if (this.isStart(x, y)) {
+                        contents += this.builder.getStartGrid(x, y);
+                        continue;
+                    } else if (this.isEnd(x, y)) {
+                        contents += this.builder.getEndGrid(x, y);
+                        continue;
+                    }
 
-                        case this.constant.START_VALUE:
-                            contents += this.builder.getStartGrid(x, y);
-                            break;
-                        case this.constant.END_VALUE:
-                            contents += this.builder.getEndGrid(x, y);
-                            break;
+                    switch (parseInt(line[x])) {
+
                         case this.constant.BLACK_VALUE:
                         default:
                             contents += this.builder.getCommonGrid(x, y);
@@ -316,10 +345,14 @@
         };
 
         // 设置墙壁的样式
+        this.moveTypeClass = {};
+        this.moveTypeClass[this.constant.WALL_VALUE] = 'wall-grid';
+        this.moveTypeClass[this.constant.RAIN_FOREST] = 'rainforest-grid';
+        this.moveTypeClass[this.constant.MOOR] = 'moor-grid';
         this.toggleVisitedClass = function (dom) {
 
             // 设置值为
-            let className = 'visited-grid';
+            let className = this.moveTypeClass[this.moveType];
 
             // 如果当前节点不在开始或者结束
             let y = dom.data('y');
@@ -479,7 +512,7 @@
         let dom = document.getElementById(id);
         console.log(dom);
         dom.title = "x:" + x + " y:" + y + "";
-        that.removeClass('visited-grid');
+        that.removeClass('wall-grid');
         that.html(dom);
     });
 
@@ -513,6 +546,17 @@
             matrix.allow_angle = data.elem.checked;
         });
 
+        // 选择行走的类型
+        let moveTypeMessage = {};
+        moveTypeMessage[matrix.constant.WALL_VALUE] = "墙壁,不可通行";
+        moveTypeMessage[matrix.constant.RAIN_FOREST] = "雨林,每次通过二倍消耗";
+        moveTypeMessage[matrix.constant.MOOR] = "沼泽,每次通过三倍消耗";
+        form.on('select(move-type)', function(data){
+
+            matrix.moveType = data.value;
+            console.log(moveTypeMessage, data.value);
+            toastr.info(moveTypeMessage[data.value], '', {timeOut: 3000});
+        });
 
         //一些事件监听
         element.on('collapse(panels)', function (data) {

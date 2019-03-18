@@ -1,6 +1,6 @@
 <?php
 
-namespace QueueAndStack\QueueFirstInFirstOutDataStructure\OpenTheLock;
+namespace QueueAndStack\QueueFirstInFirstOut\OpenTheLock;
 
 //    你有一个带有四个圆形拨轮的转盘锁。每个拨轮都有10个数字： '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' 。每个拨轮可以自由旋转：例如把 '9' 变为  '0','0' 变为 '9' 。每次旋转都只能旋转一个拨轮的一位数字。
 //

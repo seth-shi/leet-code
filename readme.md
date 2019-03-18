@@ -7,6 +7,7 @@
 ![](visual/media/linked-list.png)
 
 ## 题目列表
+* [可视化算法](visual)
 * 链表
     * 单链表
         * [设计链表](LinkedList/SinglyLinkedList/DesignLinkedList.php)
@@ -29,7 +30,10 @@
         * [旋转链表](LinkedList/Conclusion/RotateList.php)
 * 队列和栈
     * 队列:先入先出的数据结构    
-        * [设计循环队列](QueueAndStack/QueueFirstInFirstOutDataStructure/DesignCircularQueue.php)
-        * [岛屿的个数(DFS)](QueueAndStack/QueueFirstInFirstOutDataStructure/NumberOfIslands.php)
-        * [岛屿的个数(BFS)](QueueAndStack/QueueFirstInFirstOutDataStructure/NumberOfIslandsII.php)
-        * [打开转盘锁](QueueAndStack/QueueFirstInFirstOutDataStructure/OpenTheLock.php)
+        * [设计循环队列](QueueAndStack/QueueFirstInFirstOut/DesignCircularQueue.php)
+        * [岛屿的个数(DFS)](QueueAndStack/QueueFirstInFirstOut/NumberOfIslands.php)
+        * [岛屿的个数(BFS)](QueueAndStack/QueueFirstInFirstOut/NumberOfIslandsII.php)
+        * [打开转盘锁](QueueAndStack/QueueFirstInFirstOut/OpenTheLock.php)
+        * [完全平方数](QueueAndStack/QueueFirstInFirstOut/PerfectSquares.php)
+    * 栈:后入先出的数据结构    
+        * [最小栈](QueueAndStack/StackLastInFirstOut/MinStack.php)

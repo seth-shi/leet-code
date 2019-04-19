@@ -20,6 +20,8 @@ namespace QueueAndStack\StackLastInFirstOut\MinStack;
 //    minStack.top();      --> 返回 0.
 //    minStack.getMin();   --> 返回 -2.
 
+
+
 class MinStack
 {
     protected $data;
@@ -34,6 +36,10 @@ class MinStack
     }
 
     /**
+     * 更优解法,每次入栈两个元素,
+     * 一个是当前值
+     * 后一个是当前最小值
+     *
      * @param Integer $x
      * @return NULL
      */

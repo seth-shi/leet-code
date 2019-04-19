@@ -37,3 +37,5 @@
         * [完全平方数](QueueAndStack/QueueFirstInFirstOut/PerfectSquares.php)
     * 栈:后入先出的数据结构    
         * [最小栈](QueueAndStack/StackLastInFirstOut/MinStack.php)
+        * [有效的括号](QueueAndStack/StackLastInFirstOut/ValidParentheses.php)
+        * [每日温度](QueueAndStack/StackLastInFirstOut/DailyTemperatures.php)

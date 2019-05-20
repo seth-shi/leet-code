@@ -44,4 +44,7 @@
         * [克隆图](QueueAndStack/StackAndDFS/CloneGraph.php)
         * [目标和](QueueAndStack/StackAndDFS/TargetSum.c)
         * [二叉树的中序遍历](QueueAndStack/StackAndDFS/BinaryTreeInorderTraversal.php)
+    * 小结
+        * [用栈实现队列](QueueAndStack/Conclusion/ImplementQueueUsingStacks.php)
+        * [用队列实现栈](QueueAndStack/Conclusion/ImplementStackUsingQueues.php)
 

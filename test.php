@@ -29,6 +29,7 @@ class Application
             array_shift($expectOutput);
             $object = $this->newClass($item['namespace'], $className = array_shift($paramNames), array_shift($paramValues));
 
+
             // 绘制输出
             $this->drawTableHeader($item['namespace']);
 
@@ -177,3 +178,6 @@ table;
         exit;
     }
 }
+
+
+(new Application(__DIR__))->run();

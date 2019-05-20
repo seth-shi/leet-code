@@ -1,6 +1,6 @@
 <?php
 
-namespace QueueAndStack\QueueFirstInFirstOut\CloneGraph;
+namespace QueueAndStack\StackAndDFS\CloneGraph;
 
 //  给定连接的  无向图中的节点的引用  ，返回图的深拷贝（克隆）。图中的每个节点都包含val（int）和List[Node]其邻居的list（）。
 

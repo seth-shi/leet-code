@@ -1,8 +1,5 @@
 <?php
 
-(new Application(__DIR__))->run();
-
-
 class Application
 {
     protected $basePath;

@@ -31,8 +31,7 @@
 * 队列和栈
     * 队列:先入先出的数据结构    
         * [设计循环队列](QueueAndStack/QueueFirstInFirstOut/DesignCircularQueue.php)
-        * [岛屿的个数(DFS)](QueueAndStack/QueueFirstInFirstOut/NumberOfIslands.php)
-        * [岛屿的个数(BFS)](QueueAndStack/QueueFirstInFirstOut/NumberOfIslandsII.php)
+        * [岛屿的个数(BFS)](QueueAndStack/QueueFirstInFirstOut/NumberOfIslands.php)
         * [打开转盘锁](QueueAndStack/QueueFirstInFirstOut/OpenTheLock.php)
         * [完全平方数](QueueAndStack/QueueFirstInFirstOut/PerfectSquares.php)
     * 栈:后入先出的数据结构    
@@ -40,3 +39,8 @@
         * [有效的括号](QueueAndStack/StackLastInFirstOut/ValidParentheses.php)
         * [每日温度](QueueAndStack/StackLastInFirstOut/DailyTemperatures.php)
         * [逆波兰表达式求值](QueueAndStack/StackLastInFirstOut/EvaluateReversePolishNotation.php)
+    * 栈和深度优先搜索
+        * [岛屿的个数(DFS)](QueueAndStack/StackAndDFS/NumberOfIslands.php)
+        * [克隆图](QueueAndStack/StackAndDFS/CloneGraph.php)
+        * [目标和](QueueAndStack/StackAndDFS/TargetSum.c)
+

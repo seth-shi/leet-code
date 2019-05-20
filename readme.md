@@ -47,4 +47,6 @@
     * 小结
         * [用栈实现队列](QueueAndStack/Conclusion/ImplementQueueUsingStacks.php)
         * [用队列实现栈](QueueAndStack/Conclusion/ImplementStackUsingQueues.php)
-
+* 哈希表
+    * 设计哈希表
+        * [设计哈希集合]

@@ -1,6 +1,6 @@
 <?php
 
-namespace QueueAndStack\QueueFirstInFirstOut\ImplementQueueUsingStacks;
+namespace QueueAndStack\QueueFirstInFirstOut\ImplementStackUsingQueues;
 
 //    使用队列实现栈的下列操作：
 //

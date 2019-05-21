@@ -46,7 +46,11 @@
     * 设计哈希表
         * [设计哈希集合](HashTable/DesignHashTable/DesignHashSet.php)
         * [设计哈希映射](HashTable/DesignHashTable/DesignHashMap.php)
+    * 哈希集合
         * [存在重复元素](HashTable/DesignHashTable/ContainsDuplicate.php)
         * [只出现一次的数字](HashTable/DesignHashTable/SingleNumber.php)
         * [两个数组的交集](HashTable/DesignHashTable/IntersectionOfTwoArrays.php)
         * [快乐数](HashTable/DesignHashTable/HappyNumber.php)
+    * 哈希映射
+        * [两数之和](HashTable/HashMap/TwoSum.php)
+        * [同构字符串](HashTable/HashMap/IsomorphicStrings.php)

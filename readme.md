@@ -1,10 +1,5 @@
 ## 记录 LeetCode 的学习
 [可视化算法搜索](http://search.shiguopeng.cn)
-## 测试
-1. `git clone https://github.com/DavidNineRoc/leet-code`
-2. `php test.php`
-3. 输出如图下
-![](visual/media/linked-list.png)
 
 ## 题目列表
 * [可视化算法](visual)
@@ -51,3 +46,7 @@
     * 设计哈希表
         * [设计哈希集合](HashTable/DesignHashTable/DesignHashSet.php)
         * [设计哈希映射](HashTable/DesignHashTable/DesignHashMap.php)
+        * [存在重复元素](HashTable/DesignHashTable/ContainsDuplicate.php)
+        * [只出现一次的数字](HashTable/DesignHashTable/SingleNumber.php)
+        * [两个数组的交集](HashTable/DesignHashTable/IntersectionOfTwoArrays.php)
+        * [快乐数](HashTable/DesignHashTable/HappyNumber.php)

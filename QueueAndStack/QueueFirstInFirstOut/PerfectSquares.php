@@ -48,10 +48,3 @@ class Solution
         return 3;
     }
 }
-
-
-return [
-    ['Solution', 'numSquares'],
-    [[], [112]],
-    [null, 4]
-];

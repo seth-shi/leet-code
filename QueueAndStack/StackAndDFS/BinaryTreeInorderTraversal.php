@@ -82,22 +82,3 @@ class Solution
         }
     }
 }
-
-//                     1
-//                  2     3
-//               4    5
-//
-//
-$root = new TreeNode(1);
-$root->left = $l = new TreeNode(2);
-$root->right = $r = new TreeNode(3);
-$l->left = new TreeNode(4);
-$l->right = new TreeNode(5);
-
-
-
-return [
-    ['Solution', 'inorderTraversal'],
-    [[], [$root]],
-    [null, [4, 2, 5, 1, 3]]
-];

@@ -1,4 +1,4 @@
 <?php
 
     
-    require __DIR__ . '/HashTable/DesignHashTable/DesignHashMap.php';
+    require __DIR__ . '/HashTable/DesignHashTable/HappyNumber.php';

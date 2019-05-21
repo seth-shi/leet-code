@@ -77,11 +77,3 @@ class Solution
         return empty($stack);
     }
 }
-
-
-
-return [
-    ["Solution","isValid"],
-    [[], ['(){{[]}()}']],
-    [null, true]
-];

@@ -53,10 +53,3 @@ class Solution
         return array_pop($stack);
     }
 }
-
-
-return [
-    ['Solution', 'evalRPN'],
-    [[], [["2","1","*","3","*"]]],
-    [null, 6]
-];

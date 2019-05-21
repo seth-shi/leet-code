@@ -49,4 +49,5 @@
         * [用队列实现栈](QueueAndStack/Conclusion/ImplementStackUsingQueues.php)
 * 哈希表
     * 设计哈希表
-        * [设计哈希集合]
+        * [设计哈希集合](HashTable/DesignHashTable/DesignHashSet.php)
+        * [设计哈希映射](HashTable/DesignHashTable/DesignHashMap.php)

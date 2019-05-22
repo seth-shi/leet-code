@@ -54,3 +54,7 @@
     * 哈希映射
         * [两数之和](HashTable/HashMap/TwoSum.php)
         * [同构字符串](HashTable/HashMap/IsomorphicStrings.php)
+        * [两个列表的最小索引总和](HashTable/HashMap/MinimumIndexSumOfTwoLists.php)
+        * [字符串中的第一个唯一字符](HashTable/HashMap/FirstUniqueCharacterInAString.php)
+        * [两个数组的交集 II](HashTable/HashMap/IntersectionOfTwoArraysII.php)
+        * [存在重复元素 II](HashTable/HashMap/ContainsDuplicateII.php)

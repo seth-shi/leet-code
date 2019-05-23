@@ -58,3 +58,11 @@
         * [字符串中的第一个唯一字符](HashTable/HashMap/FirstUniqueCharacterInAString.php)
         * [两个数组的交集 II](HashTable/HashMap/IntersectionOfTwoArraysII.php)
         * [存在重复元素 II](HashTable/HashMap/ContainsDuplicateII.php)
+    * 设计键
+        * [字母异位词分组](HashTable/DesignTheKey/GroupAnagrams.php)
+        * [有效的数独](HashTable/DesignTheKey/ValidSudoku.php)
+        * [寻找重复的子树](HashTable/DesignTheKey/FindDuplicateSubtrees.php)
+    * 小结
+        * [宝石与石头](HashTable/Conclusion/JewelsAndStones.php)
+        * [无重复字符的最长子串](HashTable/Conclusion/LongestSubstringWithoutRepeatingCharacters.php)
+        * [四数相加 II](HashTable/Conclusion/SumII.php)
